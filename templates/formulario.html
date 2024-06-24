@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Asentamiento del hormigon</title>
+    <script>
+        function clasificarInsecto(event) {
+            event.preventDefault();
+            const Fine_Aggr = document.getElementById('Fine_Aggr').value;
+            const Coarse_Aggr = document.getElementById('Coarse_Aggr').value;
+            const Slag = document.getElementById('Slag').value;
+            const Water = document.getElementById('Water').value;
+            const Cement = document.getElementById('Cement').value;
+            const Fly_ash = document.getElementById('Fly_ash').value;
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `Fine_Aggr=${Fine_Aggr}&Coarse_Aggr=${Coarse_Aggr}&Slag=${Slag}&Water=${Water}&Cement=${Cement}&Fly_ash=${Fly_ash}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('resultado').innerText = 'Error: ' + data.error;
+                } else {
+                    document.getElementById('resultado').innerText = 'El hormigon tiene una resistencia de ' + data.categoria;
+                }
+            })
+            .catch(error => {
+                document.getElementById('resultado').innerText = 'Error en la solicitud.';
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Asentamiento del hormigon (resistencia a la compresión)</h1>
+    <form id="formulario" onsubmit="clasificarInsecto(event)">
+
+        <label for="Fine_Aggr"> Agregados finos (Arena - kg/m^3):</label>
+        <input type="text" id="Fine_Aggr" name="Fine_Aggr"><br><br>
+
+        <label for="Coarse_Aggr">Árido Grueso (Grava, piedra triturada - kg/m^3):</label>
+        <input type="text" id="Coarse_Aggr" name="Coarse_Aggr"><br><br>
+
+        <label for="Slag">Escoria (líquido fundido kg/m^3):</label>
+        <input type="text" id="Slag" name="Slag"><br><br>
+
+
+        <label for="Water">Agua (kg/m^3):</label>
+        <input type="text" id="Water" name="Water"><br><br>
+
+        <label for="Cement">Cemento (kg/m^3):</label>
+        <input type="text" id="Cement" name="Cement"><br><br>
+
+        <label for="Fly_ash">Cenizas volantes(kg/m^3):</label>
+        <input type="text" id="Fly_ash" name="Fly_ash"><br><br>
+
+        <input type="submit" value="Enviar">
+    </form>
+    <p id="resultado"></p>
+</body>
+</html>
