@@ -32,6 +32,16 @@
                 console.error('Error:', error);
             });
         }
+
+        function limpiarFormulario() {
+            document.getElementById('Fine_Aggr').value = '';
+            document.getElementById('Coarse_Aggr').value = '';
+            document.getElementById('Slag').value = '';
+            document.getElementById('Water').value = '';
+            document.getElementById('Cement').value = '';
+            document.getElementById('Fly_ash').value = '';
+            document.getElementById('resultado').innerText = '';
+        }
     </script>
 </head>
 <body>
@@ -59,6 +69,7 @@
 
         <input type="submit" value="Enviar">
     </form>
+    <button onclick="limpiarFormulario()">Limpiar</button>
     <p id="resultado"></p>
 </body>
 </html>
